@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/loginScreen"
-    tools:context=".LoginEmployerFragment">
+    tools:context=".LoginEmployeeFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,8 +50,8 @@
             android:layout_marginBottom="10dp"
             android:text="Register"
             android:textSize="18dp"
-            android:textColor="#fff"
             android:background="#E91E63"
+            android:textColor="#fff"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="match_parent"
@@ -62,12 +62,6 @@
             android:textStyle="bold"
             android:textAlignment="center"/>
     </LinearLayout>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_dialog_email"
-        android:layout_gravity="bottom|end"
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp"/>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</FrameLayout>
