@@ -13,10 +13,10 @@ public interface APIInterface {
 
 
     //candidate
-    @POST("/employee/authenticate")
+    @POST("/candidate/authenticate")
     Call<ResponseEmployee> loginEmployee(@Body RequestEmployee employee);
 
-    @POST("/employee/register")
+    @POST("/candidate/register")
     Call<com.devsanjeev.jobbox.employee.employeeRegister.ResponseEmployee> registerEmployee(@Body com.devsanjeev.jobbox.employee.employeeRegister.RequestEmployee employee);
 
     /*

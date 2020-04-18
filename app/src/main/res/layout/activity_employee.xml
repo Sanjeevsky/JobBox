@@ -5,5 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".employee.EmployeeActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/container_employee"
+        >
+
+        <!-- Main content -->
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation_employee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimary"
+            app:itemIconTint="@color/white"
+            app:itemTextColor="@color/white"
+            app:menu="@menu/bottom_navigation_menu_employee"
+            />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

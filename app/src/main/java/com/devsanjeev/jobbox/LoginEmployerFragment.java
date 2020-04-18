@@ -1,5 +1,6 @@
 package com.devsanjeev.jobbox;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devsanjeev.jobbox.employee.EmployeeActivity;
+import com.devsanjeev.jobbox.employer.EmployerActivity;
 import com.devsanjeev.jobbox.employer.employerRegister.RequestEmployer;
 import com.devsanjeev.jobbox.employer.employerRegister.ResponseEmployer;
 import com.devsanjeev.jobbox.retrofit.APIClient;
@@ -76,19 +79,22 @@ public class LoginEmployerFragment extends Fragment {
             Password.setError("Please Enter Password");
         }
         if(!email.isEmpty()&&!password.isEmpty()){
-            RequestEmployer employer=new RequestEmployer();
+            com.devsanjeev.jobbox.employer.employerLogin.RequestEmployer employer= new com.devsanjeev.jobbox.employer.employerLogin.RequestEmployer();
             employer.setEmail(email);
             employer.setPassword(password);
-            Call<ResponseEmployer> call=apiInterface.loginEmployer(employer);
-            call.enqueue(new Callback<ResponseEmployer>() {
+            Call<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer> call=apiInterface.loginEmployer(employer);
+            call.enqueue(new Callback<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer>() {
                 @Override
-                public void onResponse(Call<ResponseEmployer> call, Response<ResponseEmployer> response) {
+                public void onResponse(Call<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer> call, Response<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer> response) {
                     if(response.code()==200){
                         if(response.body().getSuccess()){
                             Toast.makeText(getActivity(), "Login Success", Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(getActivity(), EmployerActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
                         }
                         else {
-                            Toast.makeText(getActivity(), "Error Occurred: "+response.body().getMsg(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Error Occurred: "+response.body(), Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {
@@ -97,10 +103,11 @@ public class LoginEmployerFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ResponseEmployer> call, Throwable t) {
+                public void onFailure(Call<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer> call, Throwable t) {
 
                 }
             });
+
         }
     }
 

@@ -13,7 +13,7 @@ public class Candidate {
     private String name;
     @SerializedName("mobile")
     @Expose
-    private Integer mobile;
+    private Long mobile;
     @SerializedName("email")
     @Expose
     private String email;
@@ -34,11 +34,11 @@ public class Candidate {
         this.name = name;
     }
 
-    public Integer getMobile() {
+    public Long getMobile() {
         return mobile;
     }
 
-    public void setMobile(Integer mobile) {
+    public void setMobile(Long mobile) {
         this.mobile = mobile;
     }
 

@@ -1,5 +1,6 @@
 package com.devsanjeev.jobbox;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devsanjeev.jobbox.employee.EmployeeActivity;
 import com.devsanjeev.jobbox.employee.employeeLogin.RequestEmployee;
 import com.devsanjeev.jobbox.employee.employeeLogin.ResponseEmployee;
 import com.devsanjeev.jobbox.employer.employerRegister.RequestEmployer;
@@ -90,6 +92,9 @@ public class LoginEmployeeFragment extends Fragment {
                     if(response.code()==200){
                         if(response.body().getSuccess()){
                             Toast.makeText(getActivity(), "Login Success", Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(getActivity(),EmployeeActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
                         }
                         else {
                             Toast.makeText(getActivity(), "Error Occurred: "+response.errorBody(), Toast.LENGTH_SHORT).show();
@@ -102,7 +107,7 @@ public class LoginEmployeeFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<ResponseEmployee> call, Throwable t) {
-
+                    Toast.makeText(getContext(), "Error: "+t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 
