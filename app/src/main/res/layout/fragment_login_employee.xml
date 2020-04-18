@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/loginScreen"
+    android:background="@drawable/login_screen"
     tools:context=".LoginEmployeeFragment">
 
     <LinearLayout
@@ -21,11 +21,12 @@
             android:backgroundTint="#fff">
 
             <EditText
-                android:id="@+id/et_login_fragment_mob_num"
+                android:id="@+id/et_login_employee_fragment_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
-                android:inputType="number"/>
+                android:textColor="#fff"
+                android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -36,11 +37,12 @@
             android:backgroundTint="#fff">
 
             <EditText
-                android:id="@+id/et_login_fragment_mob_num"
+                android:id="@+id/et_login_employee_fragment_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
-                android:inputType="number"/>
+                android:textColor="#fff"
+                android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -48,20 +50,29 @@
             android:layout_height="45dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Register"
+            android:text="Login"
             android:textSize="18dp"
-            android:background="#E91E63"
+            android:id="@+id/et_login_employee_login_btn"
             android:textColor="#fff"
+            android:background="#E91E63"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Doesn't Has Account? Register"
             android:textSize="18dp"
+            android:id="@+id/doesnt_have_account"
             android:textColor="#fff"
             android:textStyle="bold"
             android:textAlignment="center"/>
     </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_login_employee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_add_icon" />
 
 
 </FrameLayout>

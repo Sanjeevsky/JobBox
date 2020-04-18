@@ -5,106 +5,137 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.devsanjeev.jobbox.employee.employeeRegister.RequestEmployee;
+import com.devsanjeev.jobbox.employee.employeeRegister.ResponseEmployee;
+import com.devsanjeev.jobbox.employer.employerRegister.RequestEmployer;
+import com.devsanjeev.jobbox.employer.employerRegister.ResponseEmployer;
+import com.devsanjeev.jobbox.retrofit.APIClient;
+import com.devsanjeev.jobbox.retrofit.APIInterface;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RegisterEmployeeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RegisterEmployeeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RegisterEmployeeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
+    private EditText FirstName,LastName,Email,Mobile,Password,ConfirmPassword;
+    private Button Register;
+    private TextView Login;
+    private APIInterface apiInterface;
     public RegisterEmployeeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegisterEmployeeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RegisterEmployeeFragment newInstance(String param1, String param2) {
-        RegisterEmployeeFragment fragment = new RegisterEmployeeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register_employee, container, false);
+        View view= inflater.inflate(R.layout.fragment_register_employee, container, false);
+        FirstName=view.findViewById(R.id.fragment_register_employee_first_name);
+        LastName=view.findViewById(R.id.fragment_register_employee_last_name);
+        Email=view.findViewById(R.id.fragment_register_employee_email);
+        Mobile=view.findViewById(R.id.fragment_register_employee_mobile);
+        Password=view.findViewById(R.id.fragment_register_employee_password);
+        ConfirmPassword=view.findViewById(R.id.fragment_register_employee_confirm_password);
+        Register=view.findViewById(R.id.fragment_register_employee_register_btn);
+        Login=view.findViewById(R.id.fragment_register_employee_already_have_account_txt);
+        apiInterface= APIClient.getClient().create(APIInterface.class);
+        Register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doRegister();
+            }
+        });
+        Login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginEmployeeFragment fragment=new LoginEmployeeFragment();
+                addFragment(fragment);
+            }
+        });
+        return view;
+    }
+    private void addFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+// Replace the contents of the container with the new fragment
+        ft.replace(R.id.your_placeholder, fragment);
+        ft.commit();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void doRegister() {
+        String firstName,lastName,email,mobile,password,confirmPassword,industry;
+        firstName=FirstName.getText().toString();
+        lastName=LastName.getText().toString();
+        email=Email.getText().toString();
+        mobile=Mobile.getText().toString();
+        password=Password.getText().toString();
+        confirmPassword= ConfirmPassword.getText().toString();
+        if(firstName.isEmpty()){
+            FirstName.setError("First Name Is Mandatory Field");
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+        if(email.isEmpty()){
+            Email.setError("Email Is Mandatory Field");
         }
-    }
+        if(mobile.isEmpty()){
+            Mobile.setError("Mobile Is Mandatory Field");
+        }
+        if(password.isEmpty()){
+            Password.setError("Password Is Mandatory Field");
+        }
+        if(confirmPassword.isEmpty()){
+            ConfirmPassword.setError("Confirm Password Is Mandatory");
+        }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+        if(!firstName.isEmpty()&&!email.isEmpty()&&!password.isEmpty()&&!confirmPassword.isEmpty()) {
+            if (password.equals(confirmPassword)) {
+               RequestEmployee employee = new RequestEmployee();
+                employee.setEmail(email);
+                employee.setFirstName(firstName);
+                employee.setLastName(lastName);
+                employee.setMobile(mobile);
+                employee.setPassword(password);
+                Call<ResponseEmployee> call=apiInterface.registerEmployee(employee);
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+                call.enqueue(new Callback<ResponseEmployee>() {
+                    @Override
+                    public void onResponse(Call<ResponseEmployee> call, Response<ResponseEmployee> response) {
+                        if(response.code()==200){
+                            if(response.body().getSuccess()){
+                                Toast.makeText(getActivity(), "Registered Successfully", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getActivity(), "Failed To Register", Toast.LENGTH_SHORT).show();
+                            }
+                        }else {
+                            Toast.makeText(getActivity(), "Error Occurred: "+response.errorBody(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+
+                    @Override
+                    public void onFailure(Call<ResponseEmployee> call, Throwable t) {
+                        Toast.makeText(getActivity(), "Error Occurred", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }else {
+                Toast.makeText(getActivity(), "Password MisMatch", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(getActivity(), "Enter All Required Fields", Toast.LENGTH_SHORT).show();
+        }
     }
 }

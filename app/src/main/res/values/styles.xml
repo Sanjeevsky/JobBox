@@ -18,11 +18,11 @@
         <!-- reference our hint & error styles -->
 <!--        <item name="hintTextAppearance">@font/open_sans_regular</item>-->
 <!--        <item name="errorTextAppearance">@font/open_sans_semi_bold</item>-->
-        <!--<item name="android:textColor">b</item>-->
-        <item name="android:textColorHint">#7C7777</item>
+        <item name="android:textColor">#FFF</item>
+        <item name="android:textColorHint">#fff</item>
         <item name="colorControlNormal">#fff</item>
         <item name="colorControlActivated">#fff</item>
-        <item name="android:colorControlNormal" tools:ignore="NewApi">#7C7777</item>
+        <item name="android:colorControlNormal" tools:ignore="NewApi">#fff</item>
         <item name="colorControlHighlight">#fff</item>
     </style>
 
