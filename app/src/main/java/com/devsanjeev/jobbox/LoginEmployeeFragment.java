@@ -1,5 +1,6 @@
 package com.devsanjeev.jobbox;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -34,6 +35,7 @@ public class LoginEmployeeFragment extends Fragment {
     private Button RegisterButton;
     private TextView DoesntHaveAccount;
     private APIInterface apiInterface;
+    GlobalClass globalVariable;
 
     public LoginEmployeeFragment() {
         // Required empty public constructor
@@ -54,6 +56,7 @@ public class LoginEmployeeFragment extends Fragment {
         Password=view.findViewById(R.id.et_login_employee_fragment_password);
         DoesntHaveAccount=view.findViewById(R.id.doesnt_have_account);
         RegisterButton=view.findViewById(R.id.et_login_employee_login_btn);
+        globalVariable = (GlobalClass)getActivity().getApplicationContext();
         apiInterface = APIClient.getClient().create(APIInterface.class);
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +95,8 @@ public class LoginEmployeeFragment extends Fragment {
                     if(response.code()==200){
                         if(response.body().getSuccess()){
                             Toast.makeText(getActivity(), "Login Success", Toast.LENGTH_SHORT).show();
+                            globalVariable.setToken(response.body().getToken());
+                            globalVariable.setCandidate(response.body().getCandidate());
                             Intent intent=new Intent(getActivity(),EmployeeActivity.class);
                             startActivity(intent);
                             getActivity().finish();

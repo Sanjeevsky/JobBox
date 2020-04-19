@@ -12,34 +12,39 @@ import android.view.MenuItem;
 import com.devsanjeev.jobbox.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class EmployerActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class EmployerActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employer);
+        EmployerApplicationFragment fragment = new EmployerApplicationFragment();
+        addFragment(fragment);
         bottomNavigation = findViewById(R.id.bottom_navigation_employer);
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home_employer:
+                        EmployerApplicationFragment fragment = new EmployerApplicationFragment();
+                        addFragment(fragment);
+                        return true;
+                    case R.id.navigation_applications_employer:
+                        EmployerNewApplicationFragment fragment1 = new EmployerNewApplicationFragment();
+                        addFragment(fragment1);
+                        return true;
+                    case R.id.navigation_profile_employer:
+                        EmployerProfileFragment fragment2 = new EmployerProfileFragment();
+                        addFragment(fragment2);
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.navigation_home_employer:
-                EmployerApplicationFragment fragment=new EmployerApplicationFragment();
-                addFragment(fragment);
-                return true;
-            case R.id.navigation_applications_employer:
-                EmployerNewApplicationFragment fragment1=new EmployerNewApplicationFragment();
-                addFragment(fragment1);
-                return true;
-            case R.id.navigation_profile_employer:
-                EmployerProfileFragment fragment2=new EmployerProfileFragment();
-                addFragment(fragment2);
-                return true;
-        }
-        return false;
-    }
+
     private void addFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

@@ -32,6 +32,7 @@ public class LoginEmployerFragment extends Fragment {
     private EditText Email,Password;
     private Button RegisterButton;
     private TextView DoesntHaveAccount;
+    private GlobalClass globalClass;
     private APIInterface apiInterface;
     public LoginEmployerFragment() {
         // Required empty public constructor
@@ -53,6 +54,7 @@ public class LoginEmployerFragment extends Fragment {
         DoesntHaveAccount=view.findViewById(R.id.doesnt_have_account);
         RegisterButton=view.findViewById(R.id.et_login_employer_login_btn);
         apiInterface = APIClient.getClient().create(APIInterface.class);
+        globalClass=(GlobalClass)getActivity().getApplicationContext();
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,6 +92,8 @@ public class LoginEmployerFragment extends Fragment {
                         if(response.body().getSuccess()){
                             Toast.makeText(getActivity(), "Login Success", Toast.LENGTH_SHORT).show();
                             Intent intent=new Intent(getActivity(), EmployerActivity.class);
+                            globalClass.setToken(response.body().getToken());
+                            globalClass.setEmployer(response.body().getEmployer());
                             startActivity(intent);
                             getActivity().finish();
                         }

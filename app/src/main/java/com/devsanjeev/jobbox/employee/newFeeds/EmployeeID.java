@@ -10,10 +10,19 @@ public class EmployeeID {
     private String id;
     @SerializedName("id")
     @Expose
-    private String applicantID;
+    private String applicantId;
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("firstName")
+    @Expose
+    private String firstName;
+    @SerializedName("mobile")
+    @Expose
+    private Long mobile;
+    @SerializedName("email")
+    @Expose
+    private String email;
 
     public String getId() {
         return id;
@@ -23,12 +32,12 @@ public class EmployeeID {
         this.id = id;
     }
 
-    public String getapplicantID() {
-        return applicantID;
+    public String getapplicantId() {
+        return applicantId;
     }
 
-    public void setapplicantID(String applicantID) {
-        this.applicantID = applicantID;
+    public void setapplicantId(String id2) {
+        this.applicantId = id2;
     }
 
     public String getStatus() {
@@ -37,6 +46,30 @@ public class EmployeeID {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public Long getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(Long mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 }
