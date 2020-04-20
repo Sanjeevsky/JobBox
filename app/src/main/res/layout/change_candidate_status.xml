@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp"
+    android:layout_marginStart="24dp"
+    android:layout_marginEnd="24dp"
+    android:layout_gravity="center">
+
+
+    <RadioGroup
+        android:id="@+id/genderRadioGroup"
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/appliedRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="4dp"
+            android:text="Applied" />
+
+        <RadioButton
+            android:id="@+id/reviewRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Under Review"
+            android:layout_marginBottom="4dp"/>
+        <RadioButton
+            android:id="@+id/selectedRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_alignParentLeft="true"
+            android:text="Selected" />
+
+
+    </RadioGroup>
+
+
+</androidx.cardview.widget.CardView>

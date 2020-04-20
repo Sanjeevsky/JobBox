@@ -9,6 +9,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment_employee_applied_applications_recycler"/>
+        android:id="@+id/fragment_employee_applied_applications_recycler"
+        android:layout_marginBottom="55dp"/>
 
 </FrameLayout>

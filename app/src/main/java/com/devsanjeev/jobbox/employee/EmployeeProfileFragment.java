@@ -4,12 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.devsanjeev.jobbox.GlobalClass;
 import com.devsanjeev.jobbox.R;
+import com.devsanjeev.jobbox.employee.employeeProfile.EditEmployeeProfileFragment;
 import com.devsanjeev.jobbox.employee.employeeProfile.EmployeeProfileResponse;
 import com.devsanjeev.jobbox.retrofit.APIClient;
 import com.devsanjeev.jobbox.retrofit.APIInterface;
@@ -22,6 +26,7 @@ public class EmployeeProfileFragment extends Fragment {
     private APIInterface apiInterface;
     private TextView Name, Mobile, DateOfBirth, GraduationCourse, PassoutYear, GraduationPercentage, GraduationCollege, TenthPercentage, TwelvePercentage, AadharNumber, Email;
     private GlobalClass globalClass;
+    private Button EditDetails;
     public EmployeeProfileFragment() {
         // Required empty public constructor
     }
@@ -43,6 +48,16 @@ public class EmployeeProfileFragment extends Fragment {
         TwelvePercentage = view.findViewById(R.id.employee_profile_twelveth_percentage);
         AadharNumber = view.findViewById(R.id.employee_profile_aadhar_mumber);
         Email = view.findViewById(R.id.employee_profile_email);
+        EditDetails=view.findViewById(R.id.employee_profile_edit_details);
+
+        EditDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditEmployeeProfileFragment fragment=new EditEmployeeProfileFragment();
+                addFragment(fragment);
+            }
+        });
+
         apiInterface= APIClient.getClient().create(APIInterface.class);
         globalClass=(GlobalClass) getActivity().getApplicationContext();
         Call<EmployeeProfileResponse> call=apiInterface.getEmployeeProfile(globalClass.getCandidate().getId());
@@ -72,5 +87,11 @@ public class EmployeeProfileFragment extends Fragment {
         });
         return view;
     }
-
+    private void addFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+// Replace the contents of the container with the new fragment
+        ft.replace(R.id.container_employee, fragment);
+        ft.commit();
+    }
 }

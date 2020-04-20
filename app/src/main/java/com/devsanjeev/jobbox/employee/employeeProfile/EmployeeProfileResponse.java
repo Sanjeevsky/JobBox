@@ -41,7 +41,7 @@ public class EmployeeProfileResponse {
     private String graduationCourse;
     @SerializedName("graduationPercentage")
     @Expose
-    private Integer graduationPercentage;
+    private Double graduationPercentage;
     @SerializedName("lastName")
     @Expose
     private String lastName;
@@ -143,11 +143,11 @@ public class EmployeeProfileResponse {
         this.graduationCourse = graduationCourse;
     }
 
-    public Integer getGraduationPercentage() {
+    public Double getGraduationPercentage() {
         return graduationPercentage;
     }
 
-    public void setGraduationPercentage(Integer graduationPercentage) {
+    public void setGraduationPercentage(Double graduationPercentage) {
         this.graduationPercentage = graduationPercentage;
     }
 

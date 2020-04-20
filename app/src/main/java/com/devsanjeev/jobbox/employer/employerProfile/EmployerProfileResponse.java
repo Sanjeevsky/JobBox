@@ -21,7 +21,7 @@ public class EmployerProfileResponse {
     private String industry;
     @SerializedName("mobile")
     @Expose
-    private String mobile;
+    private Long mobile;
     @SerializedName("password")
     @Expose
     private String password;
@@ -33,11 +33,11 @@ public class EmployerProfileResponse {
     private String otp;
 
 
-    public String getMobile() {
+    public Long getMobile() {
         return mobile;
     }
 
-    public void setMobile(String mobile) {
+    public void setMobile(Long mobile) {
         this.mobile = mobile;
     }
 

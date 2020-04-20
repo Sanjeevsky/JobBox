@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".employer.EmployerNewApplicationFragment">
-
+    tools:context=".employee.employeeProfile.EditEmployeeProfileFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,10 +21,10 @@
             android:theme="@style/TextInputLayoutAppearance">
 
             <EditText
-                android:id="@+id/new_application_title"
+                android:id="@+id/update_employee_firstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Application Title"
+                android:hint="First Name"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -38,10 +37,10 @@
             android:theme="@style/TextInputLayoutAppearance">
 
             <EditText
-                android:id="@+id/new_application_company_name"
+                android:id="@+id/update_employee_lastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Company Name"
+                android:hint="LastName"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,10 +53,10 @@
             android:theme="@style/TextInputLayoutAppearance">
 
             <EditText
-                android:id="@+id/new_application_location"
+                android:id="@+id/update_employee_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Location"
+                android:hint="Email"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,10 +69,10 @@
             android:theme="@style/TextInputLayoutAppearance">
 
             <EditText
-                android:id="@+id/new_application_skills_required"
+                android:id="@+id/update_employee_mobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Skills Required"
+                android:hint="Mobile"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -86,13 +85,12 @@
             android:theme="@style/TextInputLayoutAppearance">
 
             <EditText
-                android:id="@+id/new_application_experience"
+                android:id="@+id/update_employee_graduation_course"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Experience Required"
+                android:hint="Graduation Course"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -102,14 +100,89 @@
             android:theme="@style/TextInputLayoutAppearance">
 
             <EditText
-                android:id="@+id/new_application_details"
+                android:id="@+id/update_employee_graduation_percentage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Details"
+                android:hint="Graduation Percentage"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:backgroundTint="#fff"
+            android:theme="@style/TextInputLayoutAppearance">
+
+            <EditText
+                android:id="@+id/update_employee_college"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="College"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:backgroundTint="#fff"
+            android:theme="@style/TextInputLayoutAppearance">
+
+            <EditText
+                android:id="@+id/update_employee_passout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Passout Year"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:backgroundTint="#fff"
+            android:theme="@style/TextInputLayoutAppearance">
+
+            <EditText
+                android:id="@+id/update_employee_10th_percentage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="10th Percentage"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:backgroundTint="#fff"
+            android:theme="@style/TextInputLayoutAppearance">
+
+            <EditText
+                android:id="@+id/update_employee12th_percentage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="12th Percentage"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:backgroundTint="#fff"
+            android:theme="@style/TextInputLayoutAppearance">
+
+            <EditText
+                android:id="@+id/update_employee_aadhar_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Aadhar Number"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
         <Button
-            android:id="@+id/new_application_create_application_btn"
+            android:id="@+id/update_employee_update_btn"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="10dp"
@@ -117,12 +190,11 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="10dp"
             android:background="#151D5A"
-            android:text="Create Application"
+            android:text="Update"
             android:textColor="#fff"
             android:textSize="18dp"
             android:textStyle="bold" />
 
     </LinearLayout>
-
 
 </FrameLayout>

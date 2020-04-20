@@ -5,15 +5,19 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.devsanjeev.jobbox.GlobalClass;
 import com.devsanjeev.jobbox.R;
 import com.devsanjeev.jobbox.employer.employerLogin.Employer;
+import com.devsanjeev.jobbox.employer.employerProfile.EditEmployerProfileFragment;
 import com.devsanjeev.jobbox.employer.employerProfile.EmployerProfileResponse;
 import com.devsanjeev.jobbox.retrofit.APIClient;
 import com.devsanjeev.jobbox.retrofit.APIInterface;
@@ -26,6 +30,7 @@ public class EmployerProfileFragment extends Fragment {
 
     private APIInterface apiInterface;
     private TextView Name,Email,Industry,Mobile;
+    private Button EditDetails;
     private GlobalClass globalClass;
 
     public EmployerProfileFragment() {
@@ -41,6 +46,7 @@ public class EmployerProfileFragment extends Fragment {
         Email =view.findViewById(R.id.employer_profile_email);
         Industry=view.findViewById(R.id.employer_profile_industry);
         Mobile=view.findViewById(R.id.employer_profile_mobile);
+        EditDetails=view.findViewById(R.id.employer_profile_edit_details);
         apiInterface= APIClient.getClient().create(APIInterface.class);
         globalClass=(GlobalClass)getActivity().getApplicationContext();
         Call<EmployerProfileResponse> call=apiInterface.getEmployerProfile(globalClass.getEmployer().getId());
@@ -51,7 +57,7 @@ public class EmployerProfileFragment extends Fragment {
                     Name.setText(response.body().getFirstName());
                     Email.setText(response.body().getEmail());
                     Industry.setText(response.body().getIndustry());
-                    Mobile.setText(response.body().getMobile());
+                    Mobile.setText(String.valueOf(response.body().getMobile()));
                 }
             }
 
@@ -60,7 +66,23 @@ public class EmployerProfileFragment extends Fragment {
 
             }
         });
+        EditDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditEmployerProfileFragment fragment=new EditEmployerProfileFragment();
+                addFragment(fragment);
+            }
+        });
+
+
         return view;
     }
+    private void addFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+// Replace the contents of the container with the new fragment
+        ft.replace(R.id.container_employer, fragment);
+        ft.commit();
+    }
+    }
 
-}

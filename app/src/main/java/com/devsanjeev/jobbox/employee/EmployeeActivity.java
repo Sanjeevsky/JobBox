@@ -48,25 +48,6 @@ public class EmployeeActivity extends AppCompatActivity {
     };
 
 
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.navigation_home_employee:
-//                EmployeeNewFeedsFragment feedsFragment=new EmployeeNewFeedsFragment();
-//                addFragment(feedsFragment);
-//                return true;
-//            case R.id.navigation_applications_employee:
-//                EmployeeAppliedFragment fragment=new EmployeeAppliedFragment();
-//                addFragment(fragment);
-//                return true;
-//            case R.id.navigation_profile_employee:
-//                EmployeeProfileFragment fragment2=new EmployeeProfileFragment();
-//                addFragment(fragment2);
-//                return true;
-//        }
-//        return false;
-//    }
-
     private void addFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
