@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -42,7 +43,6 @@ public class CreatedApplicationAdapter extends RecyclerView.Adapter<CreatedAppli
     private Context context;
     private ArrayList<CreatedApplicationResponse> list=new ArrayList<>();
     private CustomItemClickListener listener;
-    private RecyclerView recyclerView;
     @NonNull
     @Override
     public CreatedApplicationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -55,19 +55,15 @@ public class CreatedApplicationAdapter extends RecyclerView.Adapter<CreatedAppli
         holder.Experience.setText(list.get(position).getExperienceRequired());
         holder.Location.setText(list.get(position).getLocation());
         holder.Details.setText(list.get(position).getApplicationDetails());
-        holder.Status.setText((list.get(position).getSkillsRequired()));
+        holder.Status.setText((list.get(position).getStatus()));
+        holder.SkillSets.setText(list.get(position).getSkillsRequired());
         holder.Title.setText(list.get(position).getTitle());
         holder.Industry.setText(list.get(position).getCompanyName());
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.recyclerView.setHasFixedSize(true);
-        AppliedCandidateAdapter applicationAdapter=new AppliedCandidateAdapter(new AppliedCandidateAdapter.CustomItemClickListener() {
-                    @Override
-                    public void onItemClick(View v, int position) {
-                        changeCandidateStatusDialog(position, list.get(position).getEmployeeID());
-                    }
-                }, list.get(position).getEmployeeID(), context);
+        AppliedCandidateAdapter2 applicationAdapter=new AppliedCandidateAdapter2(list.get(position).getEmployeeID(), context);
         holder.recyclerView.setAdapter(applicationAdapter);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        holder.ChangeStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onItemClick(view,position);
@@ -81,18 +77,21 @@ public class CreatedApplicationAdapter extends RecyclerView.Adapter<CreatedAppli
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView Title,Industry,Status,Details,Location,Experience;
+        private TextView Title,Industry,Status,SkillSets,Details,Location,Experience;
         private RecyclerView recyclerView;
         private CardView cardView;
+        private Button ChangeStatus;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Title=itemView.findViewById(R.id.created_applications_title);
             Industry=itemView.findViewById(R.id.created_applications_industry);
-            Status=itemView.findViewById(R.id.created_applications_skillset);
+            SkillSets=itemView.findViewById(R.id.created_applications_skillset);
+            Status=itemView.findViewById(R.id.created_applications_status);
             Details=itemView.findViewById(R.id.created_applications_details);
             Location=itemView.findViewById(R.id.created_applications_location);
             Experience=itemView.findViewById(R.id.created_applications_experience);
             recyclerView=itemView.findViewById(R.id.applied_candidate_recycler);
+            ChangeStatus=itemView.findViewById(R.id.created_applications_change_status_btn);
             cardView=itemView.findViewById(R.id.application_cardView);
         }
     }
@@ -101,7 +100,8 @@ public class CreatedApplicationAdapter extends RecyclerView.Adapter<CreatedAppli
     }
     private APIInterface apiInterface;
     private GlobalClass globalClass;
-    public void changeCandidateStatusDialog(final int position, final List<EmployeeID> employeeID) {
+    public void changeCandidateStatusDialog(int position,List<EmployeeID> employeeID) {
+        final EmployeeID employeeID1=employeeID.get(position);
         apiInterface= APIClient.getClient().create(APIInterface.class);
         globalClass=(GlobalClass)context.getApplicationContext();
 
@@ -130,7 +130,7 @@ public class CreatedApplicationAdapter extends RecyclerView.Adapter<CreatedAppli
                         toastString=selectedRadioButton.getText().toString();
                         ChangeCandidateRequest request=new ChangeCandidateRequest();
                         request.setId(globalClass.getEmployer().getId());
-                        request.setEmployeeId(employeeID.get(position).getapplicantId());
+                        request.setEmployeeId(employeeID1.getapplicantId());
                         request.setStatus(toastString);
                         Call<ResponseApplication> call=apiInterface.updateCandidateStatus(request);
                         call.enqueue(new Callback<ResponseApplication>() {

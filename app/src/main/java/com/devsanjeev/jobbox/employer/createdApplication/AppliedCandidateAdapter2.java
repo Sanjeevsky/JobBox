@@ -11,22 +11,19 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.devsanjeev.jobbox.R;
-import com.devsanjeev.jobbox.employee.newFeeds.AppliedApplicationAdapter;
 import com.devsanjeev.jobbox.employee.newFeeds.EmployeeID;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AppliedCandidateAdapter extends RecyclerView.Adapter<AppliedCandidateAdapter.ViewHolder> {
+public class AppliedCandidateAdapter2 extends RecyclerView.Adapter<AppliedCandidateAdapter2.ViewHolder> {
 
-    public AppliedCandidateAdapter(CustomItemClickListener listener, List<EmployeeID> list, Context context) {
-        this.listener = listener;
+    public AppliedCandidateAdapter2(List<EmployeeID> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
-    private CustomItemClickListener listener;
+
     private List<EmployeeID> list=new LinkedList<>();
     private Context context;
     @NonNull
@@ -42,17 +39,8 @@ public class AppliedCandidateAdapter extends RecyclerView.Adapter<AppliedCandida
         holder.Mobile.setText(String.valueOf(list.get(position).getMobile()));
         holder.Email.setText(list.get(position).getEmail());
         holder.Status.setText(list.get(position).getStatus());
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onItemClick(view,position);
-            }
-        });
 
 
-    }
-    public interface CustomItemClickListener {
-        void onItemClick(View v, int position);
     }
 
     @Override

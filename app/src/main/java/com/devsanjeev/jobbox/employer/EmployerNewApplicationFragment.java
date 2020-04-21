@@ -4,8 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +32,8 @@ public class EmployerNewApplicationFragment extends Fragment {
     private Button CreateApplication;
     private APIInterface apiInterface;
     private GlobalClass globalClass;
+    private FrameLayout frameLayout;
+    private ImageView loadingImage;
     public EmployerNewApplicationFragment() {
         // Required empty public constructor
     }
@@ -48,6 +54,8 @@ public class EmployerNewApplicationFragment extends Fragment {
         CreateApplication=view.findViewById(R.id.new_application_create_application_btn);
         apiInterface= APIClient.getClient().create(APIInterface.class);
         globalClass=(GlobalClass)getActivity().getApplicationContext();
+        frameLayout = view.findViewById(R.id.pBar_employer_new_application);
+        loadingImage = view.findViewById(R.id.loading_image_employer_new_application);
         CreateApplication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,6 +64,13 @@ public class EmployerNewApplicationFragment extends Fragment {
         });
         return view;
     }
+    private void hideView(final View view) {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in_out);
+        animation.setRepeatCount(Animation.INFINITE);
+        view.startAnimation(animation);
+
+    }
+
 
     private void doRegister() {
         String title, companyName, skill, experience, locationText, details;
@@ -67,6 +82,9 @@ public class EmployerNewApplicationFragment extends Fragment {
         details=Details.getText().toString();
 
         if(!title.isEmpty()&&!companyName.isEmpty()&&!skill.isEmpty()&&!experience.isEmpty()&&!locationText.isEmpty()&&!details.isEmpty()){
+            frameLayout.setVisibility(View.VISIBLE);
+            loadingImage.setVisibility(View.VISIBLE);
+            hideView(loadingImage);
             RequestApplication application=new RequestApplication();
             application.setEmployerId(globalClass.getEmployer().getId());
             application.setStatus("Fresh");
@@ -82,15 +100,20 @@ public class EmployerNewApplicationFragment extends Fragment {
                 @Override
                 public void onResponse(Call<ResponseApplication> call, Response<ResponseApplication> response) {
                     if(response.code()==200){
+                        frameLayout.setVisibility(View.GONE);
+                        loadingImage.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Application Created", Toast.LENGTH_LONG).show();
                     }else {
+                        frameLayout.setVisibility(View.GONE);
+                        loadingImage.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), "Error Occurred", Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseApplication> call, Throwable t) {
-
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                 }
             });
         }else {

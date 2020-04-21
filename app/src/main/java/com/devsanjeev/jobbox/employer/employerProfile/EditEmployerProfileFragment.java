@@ -9,8 +9,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.devsanjeev.jobbox.GlobalClass;
 import com.devsanjeev.jobbox.R;
@@ -28,6 +32,9 @@ public class EditEmployerProfileFragment extends Fragment {
     private Button Update;
     private APIInterface apiInterface;
     private GlobalClass globalClass;
+    private FrameLayout frameLayout;
+    private ImageView loadingImage;
+
     public EditEmployerProfileFragment() {
         // Required empty public constructor
     }
@@ -45,6 +52,11 @@ public class EditEmployerProfileFragment extends Fragment {
         Industry=view.findViewById(R.id.update_employer_industry);
         Email=view.findViewById(R.id.update_employer_email);
         Update=view.findViewById(R.id.update_employer_update_btn);
+        frameLayout = view.findViewById(R.id.pBar_employer_edit_profile);
+        loadingImage = view.findViewById(R.id.loading_image_employer_edit_profile);
+        frameLayout.setVisibility(View.VISIBLE);
+        loadingImage.setVisibility(View.VISIBLE);
+        hideView(loadingImage);
 
         Call<EmployerProfileResponse> call=apiInterface.getEmployerProfile(globalClass.getEmployer().getId());
         call.enqueue(new Callback<EmployerProfileResponse>() {
@@ -56,15 +68,20 @@ public class EditEmployerProfileFragment extends Fragment {
                     Mobile.setText(String.valueOf(response.body().getMobile()));
                     Email.setText(response.body().getEmail());
                     Industry.setText(response.body().getIndustry());
-
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
 
                 }else {
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
 
                 }
             }
 
             @Override
             public void onFailure(Call<EmployerProfileResponse> call, Throwable t) {
+                frameLayout.setVisibility(View.GONE);
+                loadingImage.setVisibility(View.GONE);
 
             }
         });
@@ -77,6 +94,12 @@ public class EditEmployerProfileFragment extends Fragment {
         });
         return view;
     }
+    private void hideView(final View view) {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in_out);
+        animation.setRepeatCount(Animation.INFINITE);
+        view.startAnimation(animation);
+
+    }
 
     private void doUpdate() {
         String firstName,lastName,email,industry,mobile;
@@ -87,6 +110,9 @@ public class EditEmployerProfileFragment extends Fragment {
         mobile=Mobile.getText().toString();
 
         if(!firstName.isEmpty()&&!lastName.isEmpty()&&!email.isEmpty()&&!industry.isEmpty()&&!mobile.isEmpty()){
+            frameLayout.setVisibility(View.VISIBLE);
+            loadingImage.setVisibility(View.VISIBLE);
+            hideView(loadingImage);
             RequestEmployer employer=new RequestEmployer();
             employer.setFirstName(firstName);
             employer.setLastName(lastName);
@@ -99,14 +125,20 @@ public class EditEmployerProfileFragment extends Fragment {
                 @Override
                 public void onResponse(Call<EmployerProfileResponse> call, Response<EmployerProfileResponse> response) {
                     if(response.code()==200){
+                        frameLayout.setVisibility(View.GONE);
+                        loadingImage.setVisibility(View.GONE);
                         EmployerProfileFragment fragment=new EmployerProfileFragment();
                         addFragment(fragment);
+                    }else {
+                        frameLayout.setVisibility(View.GONE);
+                        loadingImage.setVisibility(View.GONE);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<EmployerProfileResponse> call, Throwable t) {
-
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                 }
             });
         }

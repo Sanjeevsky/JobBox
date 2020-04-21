@@ -67,6 +67,8 @@ public interface APIInterface {
 
     @PUT("/apply/updateStatus")
     Call<ResponseApplication> updateCandidateStatus(@Body ChangeCandidateRequest request);
+
+
     /*
 
 

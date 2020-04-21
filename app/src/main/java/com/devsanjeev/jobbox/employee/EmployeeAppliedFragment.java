@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.devsanjeev.jobbox.GlobalClass;
 import com.devsanjeev.jobbox.R;
@@ -29,6 +33,8 @@ public class EmployeeAppliedFragment extends Fragment {
     private APIInterface apiInterface;
     GlobalClass globalClass;
     private RecyclerView recyclerView;
+    private FrameLayout frameLayout;
+    private ImageView loadingImage;
     public EmployeeAppliedFragment() {
         // Required empty public constructor
     }
@@ -43,6 +49,11 @@ public class EmployeeAppliedFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
         apiInterface= APIClient.getClient().create(APIInterface.class);
+        frameLayout = view.findViewById(R.id.pBar_employee_applied);
+        loadingImage = view.findViewById(R.id.loading_image_employee_applied);
+        frameLayout.setVisibility(View.VISIBLE);
+        loadingImage.setVisibility(View.VISIBLE);
+        hideView(loadingImage);
         Call<ArrayList<Application>> call=apiInterface.appliedApplications(globalClass.getCandidate().getId());
         call.enqueue(new Callback<ArrayList<Application>>() {
             @Override
@@ -50,15 +61,28 @@ public class EmployeeAppliedFragment extends Fragment {
                 if(response.code()==200){
                     AppliedApplicationAdapter adapter=new AppliedApplicationAdapter(getActivity(),response.body());
                     recyclerView.setAdapter(adapter);
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
+                }
+                else {
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Application>> call, Throwable t) {
-
+                frameLayout.setVisibility(View.GONE);
+                loadingImage.setVisibility(View.GONE);
             }
         });
         return view;
     }
-    
+    private void hideView(final View view) {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in_out);
+        animation.setRepeatCount(Animation.INFINITE);
+        view.startAnimation(animation);
+
+    }
+
 }

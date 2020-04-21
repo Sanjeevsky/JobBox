@@ -9,8 +9,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +33,8 @@ public class RegisterEmployerFragment extends Fragment {
     private Button Register;
     private TextView Login;
     private APIInterface apiInterface;
+    private FrameLayout frameLayout;
+    private ImageView loadingImage;
 
     public RegisterEmployerFragment() {
         // Required empty public constructor
@@ -53,6 +59,8 @@ public class RegisterEmployerFragment extends Fragment {
         Industry=view.findViewById(R.id.fragment_register_employer_industry);
         Register=view.findViewById(R.id.fragment_register_employer_register_btn);
         Login=view.findViewById(R.id.fragment_register_employer_already_have_account_txt);
+        frameLayout = view.findViewById(R.id.pBar_employer_register);
+        loadingImage = view.findViewById(R.id.loading_image_employer_register);
         apiInterface= APIClient.getClient().create(APIInterface.class);
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +115,9 @@ public class RegisterEmployerFragment extends Fragment {
 
         if(!firstName.isEmpty()&&!email.isEmpty()&&!password.isEmpty()&&!confirmPassword.isEmpty()&&!industry.isEmpty()) {
             if (password.equals(confirmPassword)) {
+                frameLayout.setVisibility(View.VISIBLE);
+                loadingImage.setVisibility(View.VISIBLE);
+                hideView(loadingImage);
                 com.devsanjeev.jobbox.employer.employerRegister.RequestEmployer employer = new RequestEmployer();
                 employer.setEmail(email);
                 employer.setFirstName(firstName);
@@ -119,12 +130,16 @@ public class RegisterEmployerFragment extends Fragment {
                     @Override
                     public void onResponse(Call<com.devsanjeev.jobbox.employer.employerRegister.ResponseEmployer> call, Response<com.devsanjeev.jobbox.employer.employerRegister.ResponseEmployer> response) {
                         if(response.code()==200){
+                            frameLayout.setVisibility(View.GONE);
+                            loadingImage.setVisibility(View.GONE);
                             if(response.body().getSuccess()){
                                 Toast.makeText(getActivity(), "Registered Successfully", Toast.LENGTH_SHORT).show();
                             }else {
                                 Toast.makeText(getActivity(), "Failed To Register", Toast.LENGTH_SHORT).show();
                             }
                         }else {
+                            frameLayout.setVisibility(View.GONE);
+                            loadingImage.setVisibility(View.GONE);
                             Toast.makeText(getActivity(), "Error Occurred: "+response.errorBody(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -132,6 +147,8 @@ public class RegisterEmployerFragment extends Fragment {
                     @Override
                     public void onFailure(Call<com.devsanjeev.jobbox.employer.employerRegister.ResponseEmployer> call, Throwable t) {
                         Toast.makeText(getActivity(), "Error Occurred", Toast.LENGTH_SHORT).show();
+                        frameLayout.setVisibility(View.GONE);
+                        loadingImage.setVisibility(View.GONE);
                     }
                 });
 
@@ -142,5 +159,11 @@ public class RegisterEmployerFragment extends Fragment {
         else {
             Toast.makeText(getActivity(), "Enter All Required Fields", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void hideView(final View view) {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in_out);
+        animation.setRepeatCount(Animation.INFINITE);
+        view.startAnimation(animation);
+
     }
 }

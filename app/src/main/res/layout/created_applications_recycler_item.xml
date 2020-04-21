@@ -61,6 +61,24 @@
                 android:id="@+id/created_applications_location"
                 android:text=""/>
         </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:text="Status: "/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:textSize="15dp"
+                    android:id="@+id/created_applications_status"
+                    android:text=""/>
+            </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -116,20 +134,23 @@
                 android:layout_height="wrap_content"
                 android:text="Candidates"
                 android:textStyle="bold"/>
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:listitem="@layout/applied_candidate_recycler_layout"
                 android:id="@+id/applied_candidate_recycler"/>
+            </androidx.core.widget.NestedScrollView>
         </LinearLayout>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Change Status"
+            android:text="View Details"
             android:id="@+id/created_applications_change_status_btn"
             android:textColor="#fff"
             android:background="@color/colorPrimary"/>
-
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

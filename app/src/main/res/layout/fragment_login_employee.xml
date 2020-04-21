@@ -6,6 +6,10 @@
     android:background="@drawable/login_screen"
     tools:context=".employee.employeeLogin.LoginEmployeeFragment">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,6 +77,22 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add_icon" />
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pBar_employee_login"
+        android:visibility="gone"
+        android:background="@color/blue_super_light">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/employee"
+            android:layout_gravity="center"
+            android:id="@+id/loading_image_employee_login"
+            android:visibility="visible"
+            android:padding="40dp"/>
+    </FrameLayout>
 
 
 </FrameLayout>

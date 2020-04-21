@@ -5,13 +5,20 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -22,6 +29,7 @@ import com.devsanjeev.jobbox.employer.createdApplication.ChangeApplicationRespon
 import com.devsanjeev.jobbox.employer.createdApplication.ChangeApplicationStatus;
 import com.devsanjeev.jobbox.employer.createdApplication.CreatedApplicationAdapter;
 import com.devsanjeev.jobbox.employer.createdApplication.CreatedApplicationResponse;
+import com.devsanjeev.jobbox.employer.createdApplication.ViewSingleFragment;
 import com.devsanjeev.jobbox.retrofit.APIClient;
 import com.devsanjeev.jobbox.retrofit.APIInterface;
 
@@ -35,6 +43,9 @@ public class EmployerApplicationFragment extends Fragment {
     private APIInterface apiInterface;
     private GlobalClass globalClass;
     private RecyclerView recyclerView;
+    private FrameLayout frameLayout;
+    private ImageView loadingImage;
+    private ArrayList<CreatedApplicationResponse> list;
     public EmployerApplicationFragment() {
         // Required empty public constructor
     }
@@ -48,63 +59,68 @@ public class EmployerApplicationFragment extends Fragment {
         globalClass=(GlobalClass)getActivity().getApplicationContext();
         apiInterface= APIClient.getClient().create(APIInterface.class);
         recyclerView=view.findViewById(R.id.application_created_recycler);
+        recyclerView.setNestedScrollingEnabled(false);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        frameLayout = view.findViewById(R.id.pBar_employer_applications);
+        loadingImage = view.findViewById(R.id.loading_image_employer_applications);
+        frameLayout.setVisibility(View.VISIBLE);
+        loadingImage.setVisibility(View.VISIBLE);
+        hideView(loadingImage);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
+
         Call<ArrayList<CreatedApplicationResponse>> call=apiInterface.createdApplications(globalClass.getEmployer().getId());
         call.enqueue(new Callback<ArrayList<CreatedApplicationResponse>>() {
             @Override
             public void onResponse(Call<ArrayList<CreatedApplicationResponse>> call, final Response<ArrayList<CreatedApplicationResponse>> response) {
                 if(response.code()==200){
+                    list=response.body();
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                     CreatedApplicationAdapter applicationAdapter=new CreatedApplicationAdapter(new CreatedApplicationAdapter.CustomItemClickListener() {
                         @Override
                         public void onItemClick(View v, int position) {
-                        closeApplicationAlert(response.body(),position);
+                       // closeApplicationAlert(list,position);
+                            ViewSingleFragment fragment=new ViewSingleFragment(list.get(position));
+                            addFragment(fragment);
                         }
-                    },getActivity(),response.body());
+                    },getActivity(),list);
                     recyclerView.setAdapter(applicationAdapter);
+                }
+                else {
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<CreatedApplicationResponse>> call, Throwable t) {
-
+                frameLayout.setVisibility(View.GONE);
+                loadingImage.setVisibility(View.GONE);
             }
         });
 
         return view;
     }
-
-    public void closeApplicationAlert(final ArrayList<CreatedApplicationResponse> body, final int position) {
-
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Close Application")
-                .setMessage("Want To Close Application?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        ChangeApplicationStatus changeApplicationStatus=new ChangeApplicationStatus();
-                        changeApplicationStatus.setId(body.get(position).getId());
-                        changeApplicationStatus.setStatus("Closed");
-                        Call<ChangeApplicationResponse> call=apiInterface.changeApplicationStatus(changeApplicationStatus);
-                        call.enqueue(new Callback<ChangeApplicationResponse>() {
-                            @Override
-                            public void onResponse(Call<ChangeApplicationResponse> call, Response<ChangeApplicationResponse> response) {
-                                if(response.code()==200){
-                                    Toast.makeText(getActivity(), "Application Status Changed", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ChangeApplicationResponse> call, Throwable t) {
-                                Toast.makeText(getActivity(), "Failed To Change Status", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        dialog.cancel();
-                    }
-                }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        }).show();
+    private void addFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+       // ft.addToBackStack(null);
+// Replace the contents of the container with the new fragment
+        ft.replace(R.id.container_employer, fragment);
+        ft.commit();
     }
+
+    private void hideView(final View view) {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in_out);
+        animation.setRepeatCount(Animation.INFINITE);
+        view.startAnimation(animation);
+
+    }
+
 }
 

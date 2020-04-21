@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.devsanjeev.jobbox.GlobalClass;
@@ -31,6 +35,9 @@ public class EmployeeNewFeedsFragment extends Fragment {
     private ArrayList<Application> list=new ArrayList<>();
     private APIInterface apiInterface;
     GlobalClass globalClass;
+    private FrameLayout frameLayout;
+    private ImageView loadingImage;
+
     public EmployeeNewFeedsFragment() {
 
         // Required empty public constructor
@@ -44,15 +51,25 @@ public class EmployeeNewFeedsFragment extends Fragment {
         recyclerView=view.findViewById(R.id.fragment_employee_newFeeds_recycler);
         apiInterface= APIClient.getClient().create(APIInterface.class);
         globalClass=(GlobalClass)getActivity().getApplicationContext();
+        frameLayout = view.findViewById(R.id.pBar_employee_new_feed);
+        loadingImage = view.findViewById(R.id.loading_image_employee_new_feed);
+        frameLayout.setVisibility(View.VISIBLE);
+        loadingImage.setVisibility(View.VISIBLE);
+        hideView(loadingImage);
         Call<ArrayList<Application>> call=apiInterface.allApplications();
         call.enqueue(new Callback<ArrayList<Application>>() {
             @Override
             public void onResponse(final Call<ArrayList<Application>> call, Response<ArrayList<Application>> response) {
                 if(response.code()==200){
                     list=response.body();
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                     NewFeedAdapter adapter= new NewFeedAdapter(new NewFeedAdapter.CustomItemClickListener() {
                         @Override
                         public void onItemClick(View v, int position) {
+                            frameLayout.setVisibility(View.VISIBLE);
+                            loadingImage.setVisibility(View.VISIBLE);
+                            hideView(loadingImage);
                             NewApplicationRequest request=new NewApplicationRequest();
                             request.setFirstName(globalClass.getCandidate().getName());
                             request.setEmail(globalClass.getCandidate().getEmail());
@@ -64,15 +81,20 @@ public class EmployeeNewFeedsFragment extends Fragment {
                                 public void onResponse(Call<Application> call, Response<Application> response) {
                                     if(response.code()==200){
                                         Toast.makeText(getContext(), "Applied Successfully", Toast.LENGTH_SHORT).show();
+                                        frameLayout.setVisibility(View.GONE);
+                                        loadingImage.setVisibility(View.GONE);
                                     }
                                     else{
-                                        Toast.makeText(getContext(), "Already Occurred", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "Error Occurred", Toast.LENGTH_SHORT).show();
+                                        frameLayout.setVisibility(View.GONE);
+                                        loadingImage.setVisibility(View.GONE);
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<Application> call, Throwable t) {
-
+                                    frameLayout.setVisibility(View.GONE);
+                                    loadingImage.setVisibility(View.GONE);
                                 }
                             });
                         }
@@ -81,17 +103,26 @@ public class EmployeeNewFeedsFragment extends Fragment {
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setAdapter(adapter);
                 }
+                else {
+                    Toast.makeText(getActivity(), "Error Occurred", Toast.LENGTH_SHORT).show();
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Application>> call, Throwable t) {
-
+                Toast.makeText(getActivity(), "Error Occurred", Toast.LENGTH_SHORT).show();
+                frameLayout.setVisibility(View.GONE);
+                loadingImage.setVisibility(View.GONE);
             }
         });
-
-
-
         return view;
     }
+    private void hideView(final View view) {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in_out);
+        animation.setRepeatCount(Animation.INFINITE);
+        view.startAnimation(animation);
 
+    }
 }

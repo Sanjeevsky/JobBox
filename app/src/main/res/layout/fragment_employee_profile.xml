@@ -289,12 +289,33 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimaryDark"
                     android:text="Edit Details"
+                    android:layout_marginBottom="12dp"
                     android:textColor="#fff"/>
 
+                <Button
+                    android:id="@+id/employee_profile_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="Logout"
+                    android:textColor="#fff"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-
     </RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pBar_employee_profile"
+        android:visibility="gone"
+        android:background="@color/blue_super_light">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/employee"
+            android:layout_gravity="center"
+            android:id="@+id/loading_image_employee_profile"
+            android:visibility="visible"
+            android:padding="40dp"/>
+    </FrameLayout>
 
 </FrameLayout>

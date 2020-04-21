@@ -1,6 +1,7 @@
 package com.devsanjeev.jobbox.employer.employerLogin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,8 +11,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +32,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class LoginEmployerFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     private EditText Email,Password;
@@ -34,6 +41,9 @@ public class LoginEmployerFragment extends Fragment {
     private TextView ForgetPassword;
     private GlobalClass globalClass;
     private APIInterface apiInterface;
+    private FrameLayout frameLayout;
+    private ImageView loadingImage;
+    private SharedPreferences preferences;
     public LoginEmployerFragment() {
         // Required empty public constructor
     }
@@ -53,6 +63,9 @@ public class LoginEmployerFragment extends Fragment {
         Password=view.findViewById(R.id.et_login_employer_fragment_password);
         ForgetPassword=view.findViewById(R.id.doesnt_have_account_employer);
         RegisterButton=view.findViewById(R.id.et_login_employer_login_btn);
+        frameLayout = view.findViewById(R.id.pBar_employer_login);
+        preferences = getActivity().getSharedPreferences("jobBox", MODE_PRIVATE);
+        loadingImage = view.findViewById(R.id.loading_image_employer_login);
         apiInterface = APIClient.getClient().create(APIInterface.class);
         globalClass=(GlobalClass)getActivity().getApplicationContext();
         RegisterButton.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +101,9 @@ public class LoginEmployerFragment extends Fragment {
             Password.setError("Please Enter Password");
         }
         if(!email.isEmpty()&&!password.isEmpty()){
+            frameLayout.setVisibility(View.VISIBLE);
+            loadingImage.setVisibility(View.VISIBLE);
+            hideView(loadingImage);
             com.devsanjeev.jobbox.employer.employerLogin.RequestEmployer employer= new com.devsanjeev.jobbox.employer.employerLogin.RequestEmployer();
             employer.setEmail(email);
             employer.setPassword(password);
@@ -101,26 +117,39 @@ public class LoginEmployerFragment extends Fragment {
                             Intent intent=new Intent(getActivity(), EmployerActivity.class);
                             globalClass.setToken(response.body().getToken());
                             globalClass.setEmployer(response.body().getEmployer());
+                            preferences.edit().putString("auth_key_employer",response.body().getEmployer().getId() ).commit();
+                            frameLayout.setVisibility(View.GONE);
+                            loadingImage.setVisibility(View.GONE);
                             startActivity(intent);
                             getActivity().finish();
                         }
                         else {
                             Toast.makeText(getActivity(), "Error Occurred: "+response.body(), Toast.LENGTH_SHORT).show();
+                            frameLayout.setVisibility(View.GONE);
+                            loadingImage.setVisibility(View.GONE);
                         }
                     }
                     else {
                         Toast.makeText(getActivity(), "Error "+response.errorBody(), Toast.LENGTH_SHORT).show();
+                        frameLayout.setVisibility(View.GONE);
+                        loadingImage.setVisibility(View.GONE);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer> call, Throwable t) {
-
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                 }
             });
         }
     }
+    private void hideView(final View view) {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in_out);
+        animation.setRepeatCount(Animation.INFINITE);
+        view.startAnimation(animation);
 
+    }
     private void addFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();

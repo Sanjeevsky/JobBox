@@ -4,8 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -31,6 +35,8 @@ public class EditEmployeeProfileFragment extends Fragment {
     private Button UpdateButton;
     private APIInterface apiInterface;
     private GlobalClass globalClass;
+    private FrameLayout frameLayout;
+    private ImageView loadingImage;
 
     public EditEmployeeProfileFragment() {
         // Required empty public constructor
@@ -54,7 +60,12 @@ public class EditEmployeeProfileFragment extends Fragment {
         PassoutYear = view.findViewById(R.id.update_employee_passout);
         UpdateButton = view.findViewById(R.id.update_employee_update_btn);
         globalClass = (GlobalClass) getActivity().getApplicationContext();
+        frameLayout = view.findViewById(R.id.pBar_employee_edit_profile);
+        loadingImage = view.findViewById(R.id.loading_image_employee_edit_profile);
         apiInterface = APIClient.getClient().create(APIInterface.class);
+        frameLayout.setVisibility(View.VISIBLE);
+        loadingImage.setVisibility(View.VISIBLE);
+        hideView(loadingImage);
         Call<EmployeeProfileResponse> call = apiInterface.getEmployeeProfile(globalClass.getCandidate().getId());
         call.enqueue(new Callback<EmployeeProfileResponse>() {
             @Override
@@ -71,12 +82,18 @@ public class EditEmployeeProfileFragment extends Fragment {
                     TwelvthPercentage.setText(String.valueOf(response.body().getPercentage12()));
                     AadharNumber.setText(String.valueOf(response.body().getAadharNumber()));
                     PassoutYear.setText(String.valueOf(response.body().getPassoutYear()));
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
+                }else {
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<EmployeeProfileResponse> call, Throwable t) {
-
+                frameLayout.setVisibility(View.GONE);
+                loadingImage.setVisibility(View.GONE);
             }
         });
 
@@ -87,6 +104,12 @@ public class EditEmployeeProfileFragment extends Fragment {
             }
         });
         return view;
+    }
+    private void hideView(final View view) {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in_out);
+        animation.setRepeatCount(Animation.INFINITE);
+        view.startAnimation(animation);
+
     }
 
     private void doUpdate() {
@@ -103,6 +126,9 @@ public class EditEmployeeProfileFragment extends Fragment {
                 aadharNumber=AadharNumber.getText().toString();
                 passoutYear=PassoutYear.getText().toString();
     if(!firstName.isEmpty()&&!mobile.isEmpty()&&!email.isEmpty()&&!graduationCourse.isEmpty()&&!college.isEmpty()&&!tenthPercentage.isEmpty()&&!twelvthPercentage.isEmpty()&&!passoutYear.isEmpty()&&!graduationPercentage.isEmpty()&&!lastName.isEmpty()){
+        frameLayout.setVisibility(View.VISIBLE);
+        loadingImage.setVisibility(View.VISIBLE);
+        hideView(loadingImage);
         UpdateCandidateRequest request=new UpdateCandidateRequest();
         request.setFirstName(firstName);
         request.setLastName(lastName);
@@ -121,15 +147,22 @@ public class EditEmployeeProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<EmployeeProfileResponse> call, Response<EmployeeProfileResponse> response) {
                 if(response.code()==200){
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                     Toast.makeText(getActivity(), "Updated Successfully", Toast.LENGTH_SHORT).show();
                     EmployeeProfileFragment fragment=new EmployeeProfileFragment();
                     addFragment(fragment);
+                }
+                else {
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<EmployeeProfileResponse> call, Throwable t) {
-
+                frameLayout.setVisibility(View.GONE);
+                loadingImage.setVisibility(View.GONE);
             }
         });
     }else {

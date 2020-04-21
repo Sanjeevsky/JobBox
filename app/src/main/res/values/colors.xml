@@ -36,4 +36,5 @@
         <item>@color/dot_dark_screen3</item>
         <item>@color/dot_dark_screen4</item>
     </array>
+    <color name="blue_super_light">#f7fafc</color>
 </resources>

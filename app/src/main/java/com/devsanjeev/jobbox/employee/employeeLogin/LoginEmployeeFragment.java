@@ -1,6 +1,7 @@
 package com.devsanjeev.jobbox.employee.employeeLogin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,8 +11,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +32,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class LoginEmployeeFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     private EditText Email,Password;
@@ -34,6 +41,9 @@ public class LoginEmployeeFragment extends Fragment {
     private TextView ForgetPassword;
     private APIInterface apiInterface;
     GlobalClass globalVariable;
+    private FrameLayout frameLayout;
+    private ImageView loadingImage;
+    private SharedPreferences preferences;
 
     public LoginEmployeeFragment() {
         // Required empty public constructor
@@ -56,6 +66,9 @@ public class LoginEmployeeFragment extends Fragment {
         RegisterButton=view.findViewById(R.id.et_login_employee_login_btn);
         globalVariable = (GlobalClass)getActivity().getApplicationContext();
         apiInterface = APIClient.getClient().create(APIInterface.class);
+        frameLayout = view.findViewById(R.id.pBar_employee_login);
+        loadingImage = view.findViewById(R.id.loading_image_employee_login);
+        preferences = getActivity().getSharedPreferences("jobBox", MODE_PRIVATE);
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,6 +102,9 @@ public class LoginEmployeeFragment extends Fragment {
             Password.setError("Please Enter Password");
         }
         if(!email.isEmpty()&&!password.isEmpty()){
+            frameLayout.setVisibility(View.VISIBLE);
+            loadingImage.setVisibility(View.VISIBLE);
+            hideView(loadingImage);
             RequestEmployee employee=new RequestEmployee();
             employee.setEmail(email);
             employee.setPassword(password);
@@ -102,26 +118,43 @@ public class LoginEmployeeFragment extends Fragment {
                             Toast.makeText(getActivity(), "Login Success", Toast.LENGTH_SHORT).show();
                             globalVariable.setToken(response.body().getToken());
                             globalVariable.setCandidate(response.body().getCandidate());
+                            preferences.edit().putString("auth_key_employee",response.body().getCandidate().getId() ).commit();
                             Intent intent=new Intent(getActivity(),EmployeeActivity.class);
                             startActivity(intent);
+                            frameLayout.setVisibility(View.GONE);
+                            loadingImage.setVisibility(View.GONE);
                             getActivity().finish();
+
                         }
                         else {
                             Toast.makeText(getActivity(), "Error Occurred: "+response.errorBody(), Toast.LENGTH_SHORT).show();
+                            frameLayout.setVisibility(View.GONE);
+                            loadingImage.setVisibility(View.GONE);
                         }
                     }
                     else {
                         Toast.makeText(getActivity(), "Error "+response.errorBody(), Toast.LENGTH_SHORT).show();
+                        frameLayout.setVisibility(View.GONE);
+                        loadingImage.setVisibility(View.GONE);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseEmployee> call, Throwable t) {
                     Toast.makeText(getContext(), "Error: "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                    frameLayout.setVisibility(View.GONE);
+                    loadingImage.setVisibility(View.GONE);
                 }
             });
 
         }
+    }
+
+    private void hideView(final View view) {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.zoom_in_out);
+        animation.setRepeatCount(Animation.INFINITE);
+        view.startAnimation(animation);
+
     }
 
     private void addFragment(Fragment fragment) {
@@ -132,4 +165,6 @@ public class LoginEmployeeFragment extends Fragment {
         ft.replace(R.id.your_placeholder, fragment);
         ft.commit();
     }
+
+
 }
