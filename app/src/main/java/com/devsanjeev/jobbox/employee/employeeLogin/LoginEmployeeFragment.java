@@ -1,4 +1,4 @@
-package com.devsanjeev.jobbox;
+package com.devsanjeev.jobbox.employee.employeeLogin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +15,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devsanjeev.jobbox.GlobalClass;
+import com.devsanjeev.jobbox.R;
+import com.devsanjeev.jobbox.employee.employeeRegister.RegisterEmployeeFragment;
 import com.devsanjeev.jobbox.employee.EmployeeActivity;
-import com.devsanjeev.jobbox.employer.EmployerActivity;
-import com.devsanjeev.jobbox.employer.employerRegister.RequestEmployer;
-import com.devsanjeev.jobbox.employer.employerRegister.ResponseEmployer;
 import com.devsanjeev.jobbox.retrofit.APIClient;
 import com.devsanjeev.jobbox.retrofit.APIInterface;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,34 +27,35 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginEmployerFragment extends Fragment {
+public class LoginEmployeeFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     private EditText Email,Password;
     private Button RegisterButton;
-    private TextView DoesntHaveAccount;
-    private GlobalClass globalClass;
+    private TextView ForgetPassword;
     private APIInterface apiInterface;
-    public LoginEmployerFragment() {
+    GlobalClass globalVariable;
+
+    public LoginEmployeeFragment() {
         // Required empty public constructor
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_login, container, false);
-        floatingActionButton=view.findViewById(R.id.fab_login_employer);
-        Email=view.findViewById(R.id.et_login_employer_fragment_email);
-        Password=view.findViewById(R.id.et_login_employer_fragment_password);
-        DoesntHaveAccount=view.findViewById(R.id.doesnt_have_account);
-        RegisterButton=view.findViewById(R.id.et_login_employer_login_btn);
+        View view= inflater.inflate(R.layout.fragment_login_employee, container, false);
+        floatingActionButton=view.findViewById(R.id.fab_login_employee);
+        Email=view.findViewById(R.id.et_login_employee_fragment_email);
+        Password=view.findViewById(R.id.et_login_employee_fragment_password);
+        ForgetPassword=view.findViewById(R.id.doesnt_have_account);
+        RegisterButton=view.findViewById(R.id.et_login_employee_login_btn);
+        globalVariable = (GlobalClass)getActivity().getApplicationContext();
         apiInterface = APIClient.getClient().create(APIInterface.class);
-        globalClass=(GlobalClass)getActivity().getApplicationContext();
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,8 +65,15 @@ public class LoginEmployerFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RegisterEmployerFragment fragment=new RegisterEmployerFragment();
+                RegisterEmployeeFragment fragment=new RegisterEmployeeFragment();
                 addFragment(fragment);
+            }
+        });
+        ForgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EmployeeForgetPasswordFragment forgetPasswordEmployeeFragment=new EmployeeForgetPasswordFragment();
+                addFragment(forgetPasswordEmployeeFragment);
             }
         });
         return view;
@@ -81,24 +89,25 @@ public class LoginEmployerFragment extends Fragment {
             Password.setError("Please Enter Password");
         }
         if(!email.isEmpty()&&!password.isEmpty()){
-            com.devsanjeev.jobbox.employer.employerLogin.RequestEmployer employer= new com.devsanjeev.jobbox.employer.employerLogin.RequestEmployer();
-            employer.setEmail(email);
-            employer.setPassword(password);
-            Call<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer> call=apiInterface.loginEmployer(employer);
-            call.enqueue(new Callback<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer>() {
+            RequestEmployee employee=new RequestEmployee();
+            employee.setEmail(email);
+            employee.setPassword(password);
+            Call<ResponseEmployee> call=apiInterface.loginEmployee(employee);
+
+            call.enqueue(new Callback<ResponseEmployee>() {
                 @Override
-                public void onResponse(Call<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer> call, Response<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer> response) {
+                public void onResponse(Call<ResponseEmployee> call, Response<ResponseEmployee> response) {
                     if(response.code()==200){
                         if(response.body().getSuccess()){
                             Toast.makeText(getActivity(), "Login Success", Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(getActivity(), EmployerActivity.class);
-                            globalClass.setToken(response.body().getToken());
-                            globalClass.setEmployer(response.body().getEmployer());
+                            globalVariable.setToken(response.body().getToken());
+                            globalVariable.setCandidate(response.body().getCandidate());
+                            Intent intent=new Intent(getActivity(),EmployeeActivity.class);
                             startActivity(intent);
                             getActivity().finish();
                         }
                         else {
-                            Toast.makeText(getActivity(), "Error Occurred: "+response.body(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Error Occurred: "+response.errorBody(), Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {
@@ -107,8 +116,8 @@ public class LoginEmployerFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer> call, Throwable t) {
-
+                public void onFailure(Call<ResponseEmployee> call, Throwable t) {
+                    Toast.makeText(getContext(), "Error: "+t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -123,5 +132,4 @@ public class LoginEmployerFragment extends Fragment {
         ft.replace(R.id.your_placeholder, fragment);
         ft.commit();
     }
-
 }

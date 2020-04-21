@@ -22,7 +22,7 @@ public class Candidate {
     private String firstName;
     @SerializedName("mobile")
     @Expose
-    private Integer mobile;
+    private Long mobile;
     @SerializedName("password")
     @Expose
     private String password;
@@ -62,11 +62,11 @@ public class Candidate {
         this.firstName = firstName;
     }
 
-    public Integer getMobile() {
+    public Long getMobile() {
         return mobile;
     }
 
-    public void setMobile(Integer mobile) {
+    public void setMobile(Long mobile) {
         this.mobile = mobile;
     }
 

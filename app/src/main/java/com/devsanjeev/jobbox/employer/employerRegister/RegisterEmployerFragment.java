@@ -1,4 +1,4 @@
-package com.devsanjeev.jobbox;
+package com.devsanjeev.jobbox.employer.employerRegister;
 
 import android.os.Bundle;
 
@@ -14,7 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.devsanjeev.jobbox.employer.employerLogin.ResponseEmployer;
+import com.devsanjeev.jobbox.R;
+import com.devsanjeev.jobbox.employer.employerLogin.LoginEmployerFragment;
 import com.devsanjeev.jobbox.employer.employerRegister.RequestEmployer;
 import com.devsanjeev.jobbox.retrofit.APIClient;
 import com.devsanjeev.jobbox.retrofit.APIInterface;

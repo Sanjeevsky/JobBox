@@ -1,7 +1,5 @@
 package com.devsanjeev.jobbox;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -12,6 +10,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.devsanjeev.jobbox.employee.employeeLogin.LoginEmployeeFragment;
+import com.devsanjeev.jobbox.employer.employerLogin.LoginEmployerFragment;
 
 public class SelectCategoryFragment extends Fragment {
 

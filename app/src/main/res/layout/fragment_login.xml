@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/login_screen"
-    tools:context=".LoginEmployerFragment">
+    tools:context=".employer.employerLogin.LoginEmployerFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,9 +59,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Doesn't Has Account? Register"
+            android:text="Forget Password? Reset"
             android:textSize="18dp"
-            android:id="@+id/doesnt_have_account"
+            android:layout_marginTop="10dp"
+            android:id="@+id/doesnt_have_account_employer"
             android:textColor="#fff"
             android:textStyle="bold"
             android:textAlignment="center"/>

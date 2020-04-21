@@ -1,5 +1,9 @@
 package com.devsanjeev.jobbox.retrofit;
 
+import com.devsanjeev.jobbox.ConfirmPasswordRequest;
+import com.devsanjeev.jobbox.ConfirmPasswordResponse;
+import com.devsanjeev.jobbox.ForgetPasswordRequest;
+import com.devsanjeev.jobbox.ForgetPasswordResponse;
 import com.devsanjeev.jobbox.employee.applyApplication.NewApplicationRequest;
 import com.devsanjeev.jobbox.employee.employeeLogin.RequestEmployee;
 import com.devsanjeev.jobbox.employee.employeeLogin.ResponseEmployee;
@@ -40,6 +44,12 @@ public interface APIInterface {
 
     @PUT("/candidate/fillCandidateDetails/{id}")
     Call<EmployeeProfileResponse> updateEmployeeDetails(@Path("id") String id, @Body UpdateCandidateRequest request);
+
+    @POST("/candidate/sendMail")
+    Call<ForgetPasswordResponse> sentMailEmployee(@Body ForgetPasswordRequest request);
+
+    @PUT("/candidate/resetPassword")
+    Call<ConfirmPasswordResponse> updateEmployeePassword(@Body ConfirmPasswordRequest request);
 
     //applications
     @GET("/apply/all")
@@ -89,5 +99,11 @@ public interface APIInterface {
 
     @POST("/apply/createdApplications/{id}")
     Call<ArrayList<CreatedApplicationResponse>> createdApplications(@Path("id") String id);
+
+    @POST("/employer/sendMail")
+    Call<ForgetPasswordResponse> sentMailEmployer(@Body ForgetPasswordRequest request);
+
+    @PUT("/employer/resetPassword")
+    Call<ConfirmPasswordResponse> updateEmployerPassword(@Body ConfirmPasswordRequest request);
 }
 

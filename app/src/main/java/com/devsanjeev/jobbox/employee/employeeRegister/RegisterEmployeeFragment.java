@@ -1,7 +1,5 @@
-package com.devsanjeev.jobbox;
+package com.devsanjeev.jobbox.employee.employeeRegister;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,10 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devsanjeev.jobbox.R;
+import com.devsanjeev.jobbox.employee.employeeLogin.LoginEmployeeFragment;
 import com.devsanjeev.jobbox.employee.employeeRegister.RequestEmployee;
 import com.devsanjeev.jobbox.employee.employeeRegister.ResponseEmployee;
-import com.devsanjeev.jobbox.employer.employerRegister.RequestEmployer;
-import com.devsanjeev.jobbox.employer.employerRegister.ResponseEmployer;
 import com.devsanjeev.jobbox.retrofit.APIClient;
 import com.devsanjeev.jobbox.retrofit.APIInterface;
 
@@ -35,8 +33,6 @@ public class RegisterEmployeeFragment extends Fragment {
     public RegisterEmployeeFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
