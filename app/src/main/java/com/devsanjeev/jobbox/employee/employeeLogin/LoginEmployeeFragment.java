@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,10 +99,13 @@ public class LoginEmployeeFragment extends Fragment {
         if(email.isEmpty()){
             Email.setError("Please Enter Email");
         }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            Email.setError("Incorrect Email");
+        }
         if(password.isEmpty()){
             Password.setError("Please Enter Password");
         }
-        if(!email.isEmpty()&&!password.isEmpty()){
+        if(!email.isEmpty()&&!password.isEmpty()&&Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             frameLayout.setVisibility(View.VISIBLE);
             loadingImage.setVisibility(View.VISIBLE);
             hideView(loadingImage);

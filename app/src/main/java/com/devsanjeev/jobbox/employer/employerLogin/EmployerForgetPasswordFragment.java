@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,10 +75,16 @@ public class EmployerForgetPasswordFragment extends Fragment {
 
     private void submitPassword() {
         email=Email.getText().toString();
+        if(email.isEmpty()){
+            Email.setError("Please Provide Email");
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            Email.setError("Incorrect Email");
+        }
         otp=OTPEditText.getText().toString();
         password=Password.getText().toString();
         confirmPassword=ConfirmPassword.getText().toString();
-        if(!email.isEmpty()&&!otp.isEmpty()&&!password.isEmpty()&&!confirmPassword.isEmpty()){
+        if(!email.isEmpty()&&!otp.isEmpty()&&!password.isEmpty()&&!confirmPassword.isEmpty()&& Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             if(password.equals(confirmPassword)){
                 ConfirmPasswordRequest request=new ConfirmPasswordRequest();
                 request.setEmail(email);
@@ -112,6 +119,7 @@ public class EmployerForgetPasswordFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 // Replace the contents of the container with the new fragment
+        ft.addToBackStack(null);
         ft.replace(R.id.your_placeholder, fragment);
         ft.commit();
     }

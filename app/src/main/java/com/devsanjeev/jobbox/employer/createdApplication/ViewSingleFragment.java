@@ -150,6 +150,7 @@ public class ViewSingleFragment extends Fragment {
                         request.setId(globalClass.getEmployer().getId());
                         request.setEmployeeId(employeeID1.getapplicantId());
                         request.setStatus(toastString);
+                        request.setApplicationId(list.getId());
                         frameLayout.setVisibility(View.VISIBLE);
                         loadingImage.setVisibility(View.VISIBLE);
                         hideView(loadingImage);
@@ -238,6 +239,7 @@ public class ViewSingleFragment extends Fragment {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
        // ft.addToBackStack(null);
 // Replace the contents of the container with the new fragment
+        ft.addToBackStack(null);
         ft.replace(R.id.container_employer, fragment);
         ft.commit();
     }

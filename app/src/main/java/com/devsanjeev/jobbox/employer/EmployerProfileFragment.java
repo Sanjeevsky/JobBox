@@ -126,6 +126,7 @@ public class EmployerProfileFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 // Replace the contents of the container with the new fragment
+        ft.addToBackStack(null);
         ft.replace(R.id.container_employer, fragment);
         ft.commit();
     }

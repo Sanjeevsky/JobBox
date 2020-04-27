@@ -111,6 +111,7 @@ public class EmployerApplicationFragment extends Fragment {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
        // ft.addToBackStack(null);
 // Replace the contents of the container with the new fragment
+        ft.addToBackStack(null);
         ft.replace(R.id.container_employer, fragment);
         ft.commit();
     }

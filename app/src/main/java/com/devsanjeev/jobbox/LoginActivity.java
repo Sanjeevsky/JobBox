@@ -61,8 +61,20 @@ public class LoginActivity extends AppCompatActivity {
     private void addFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.addToBackStack(null);
 // Replace the contents of the container with the new fragment
         ft.replace(R.id.your_placeholder, fragment);
         ft.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+        if (backStackEntryCount == 1) {
+            // write your code to switch between fragments.
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

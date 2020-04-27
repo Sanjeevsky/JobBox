@@ -3,6 +3,8 @@ package com.devsanjeev.jobbox.employee;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -83,6 +85,8 @@ public class EmployeeNewFeedsFragment extends Fragment {
                                         Toast.makeText(getContext(), "Applied Successfully", Toast.LENGTH_SHORT).show();
                                         frameLayout.setVisibility(View.GONE);
                                         loadingImage.setVisibility(View.GONE);
+                                        EmployeeAppliedFragment fragment=new EmployeeAppliedFragment();
+                                        addFragment(fragment);
                                     }
                                     else{
                                         Toast.makeText(getContext(), "Error Occurred", Toast.LENGTH_SHORT).show();
@@ -124,5 +128,13 @@ public class EmployeeNewFeedsFragment extends Fragment {
         animation.setRepeatCount(Animation.INFINITE);
         view.startAnimation(animation);
 
+    }
+    private void addFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+// Replace the contents of the container with the new fragment
+        ft.addToBackStack(null);
+        ft.replace(R.id.container_employee, fragment);
+        ft.commit();
     }
 }

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,7 @@ public class RegisterEmployerFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 // Replace the contents of the container with the new fragment
+        ft.addToBackStack(null);
         ft.replace(R.id.your_placeholder, fragment);
         ft.commit();
     }
@@ -100,8 +102,12 @@ public class RegisterEmployerFragment extends Fragment {
         if(email.isEmpty()){
          Email.setError("Email Is Mandatory Field");
         }
-        if(mobile.isEmpty()){
-            Mobile.setError("Mobile Is Mandatory Field");
+        if(mobile.length()!=10){
+            Mobile.setError("Incorrect Mobile Number");
+        }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            Email.setError("Incorrect Email Field");
         }
         if(password.isEmpty()){
          Password.setError("Password Is Mandatory Field");
@@ -113,7 +119,7 @@ public class RegisterEmployerFragment extends Fragment {
          Industry.setError("Industry Is Mandatory Field");
         }
 
-        if(!firstName.isEmpty()&&!email.isEmpty()&&!password.isEmpty()&&!confirmPassword.isEmpty()&&!industry.isEmpty()) {
+        if(!firstName.isEmpty()&&!email.isEmpty()&&!password.isEmpty()&&!confirmPassword.isEmpty()&&!industry.isEmpty()&&Patterns.EMAIL_ADDRESS.matcher(email).matches()&&mobile.length()==10) {
             if (password.equals(confirmPassword)) {
                 frameLayout.setVisibility(View.VISIBLE);
                 loadingImage.setVisibility(View.VISIBLE);

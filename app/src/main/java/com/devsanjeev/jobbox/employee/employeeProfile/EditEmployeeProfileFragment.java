@@ -125,7 +125,7 @@ public class EditEmployeeProfileFragment extends Fragment {
                 twelvthPercentage=TwelvthPercentage.getText().toString();
                 aadharNumber=AadharNumber.getText().toString();
                 passoutYear=PassoutYear.getText().toString();
-    if(!firstName.isEmpty()&&!mobile.isEmpty()&&!email.isEmpty()&&!graduationCourse.isEmpty()&&!college.isEmpty()&&!tenthPercentage.isEmpty()&&!twelvthPercentage.isEmpty()&&!passoutYear.isEmpty()&&!graduationPercentage.isEmpty()&&!lastName.isEmpty()){
+    if(!firstName.isEmpty()&& mobile.length() == 10 &&!email.isEmpty()&&!graduationCourse.isEmpty()&&!college.isEmpty()&&!tenthPercentage.isEmpty()&&!twelvthPercentage.isEmpty()&&!passoutYear.isEmpty()&&!graduationPercentage.isEmpty()&&!lastName.isEmpty()){
         frameLayout.setVisibility(View.VISIBLE);
         loadingImage.setVisibility(View.VISIBLE);
         hideView(loadingImage);
@@ -173,6 +173,7 @@ public class EditEmployeeProfileFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 // Replace the contents of the container with the new fragment
+        ft.addToBackStack(null);
         ft.replace(R.id.container_employee, fragment);
         ft.commit();
     }

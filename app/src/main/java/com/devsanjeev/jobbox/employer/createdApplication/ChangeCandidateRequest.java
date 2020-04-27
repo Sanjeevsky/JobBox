@@ -8,12 +8,23 @@ public class ChangeCandidateRequest {
     @SerializedName("id")
     @Expose
     private String id;
+    @SerializedName("_id")
+    @Expose
+    private String applicationId;
     @SerializedName("employeeId")
     @Expose
     private String employeeId;
     @SerializedName("status")
     @Expose
     private String status;
+
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
 
     public String getId() {
         return id;

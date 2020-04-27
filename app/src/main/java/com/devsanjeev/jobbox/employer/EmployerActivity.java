@@ -7,7 +7,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.devsanjeev.jobbox.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -50,6 +52,39 @@ public class EmployerActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 // Replace the contents of the container with the new fragment
         ft.replace(R.id.container_employer, fragment);
+        ft.addToBackStack(null);
         ft.commit();
     }
+
+    @Override
+    public void onBackPressed() {
+        int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+        if (backStackEntryCount == 1) {
+               // write your code to switch between fragments.
+            if (doubleBackToExitPressedOnce) {
+                finish();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    boolean doubleBackToExitPressedOnce = false;
+
+//    @Override
+//    public void onBackPressed() {
+
 }
